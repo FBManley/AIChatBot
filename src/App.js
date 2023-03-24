@@ -1,23 +1,38 @@
-import logo from './logo.svg';
 import './App.css';
+import {useState} from 'react'
+import '@chatscope/chat-ui-kit-styes/dist/default/styles.min.css'
+import {MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator} from "@chatscope"
 
 function App() {
+  const [messages, setMessages] = useState([{
+    message: "Hello, I'm ChatGPT",
+    sneder: "ChatGPT"
+  }])
+  const handleSend = async (message) => {
+    const newMessage = {
+      message: message,
+      sender: "user",
+      direction: "outgoing"
+    }
+    const newMessages = [...messages, newMessage];
+    //update our message state
+    setMessages(newMessages)
+    // process message to chatGPT
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+     <div style={{position: "relative", height: "800px", width: "700px"}}>
+      <MainContainer>
+        <ChatContainer>
+          <MessageList>
+          {messages.map((message, i) => {
+            return <Message key={i} model={message}/>
+          })}
+          </MessageList>
+          <MessageInput placeholder='Type Message Here' onSend={handleSend}/>
+        </ChatContainer>
+      </MainContainer>
+     </div>
     </div>
   );
 }
